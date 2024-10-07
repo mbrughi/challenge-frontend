@@ -156,10 +156,22 @@ export function useApi() {
         },
         body: JSON.stringify(personData),
       });
-      if (!response.ok) throw new Error('Failed to update person');
-      return response.json();
+      // Controllo dello stato della risposta
+      if (!response.ok) {
+        const errorMessage = await response.text();  // Estrai il messaggio di errore
+        throw new Error(`Errore durante l'aggiornamento della persona: ${errorMessage}`);
+      }
+
+      // Parsing della risposta JSON
+      const data = await response.json();
+      console.log('Risposta dal backend:', data);  // Debugging per vedere cosa ritorna il backend
+
+      return data;  // Torna i dati aggiornati dal backend
+
     } catch (err) {
-      error.value = err.message;
+      console.error('Errore durante l\'aggiornamento della persona:', err.message);
+      error.value = err.message;  // Imposta l'errore visibile in Vue
+      throw err;  // Lancia l'errore per una gestione più avanzata nel frontend
     }
   };
 

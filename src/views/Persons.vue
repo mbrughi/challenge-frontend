@@ -171,14 +171,13 @@ export default {
 
     const savePerson = async () => {
       try {
-          if (isEditing.value && selectedPerson.value) {
-            const updatedData = await updatePerson(selectedPerson.value.id, selectedPerson.value);
-            console.log('Persona aggiornata:', updatedData);  // Log per verificare l'aggiornamento
-            persons.value = await getPersons();  // Ricarica l'elenco delle persone
-            dialog.value = false;  // Chiudi il dialogo dopo il salvataggio
-          }
+        if (isEditing.value && selectedPerson.value) {
+          await updatePerson(selectedPerson.value.id, selectedPerson.value);
+        }
+        persons.value = await getPersons();
+        dialog.value = false;
       } catch (err) {
-        console.error('Errore durante il salvataggio della persona:', err.message);
+        error.value = err.message;
       }
     };
 
